@@ -1,0 +1,158 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:models="clr-namespace:RGZ.Models"
+			 xmlns:dbm="clr-namespace:RGZ.Models.DbTableStruct"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="RGZ.Views.MainWindowView">
+	<UserControl.Styles>
+		<Style Selector="ScrollViewer.sv1">
+			<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+			<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+			<Setter Property="Padding" Value="0,0,0,16"/>
+			<Setter Property="AllowAutoHide" Value="True"/>
+			<Setter Property="Height" Value="520"/>
+			<Setter Property="Margin" Value="0,0,0,5"/>
+		</Style>
+		<Style Selector="TextBlock.tb1">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="Margin" Value="0,7,0,7"/>
+		</Style>
+		<Style Selector="ScrollViewer.sv2">
+			<Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+			<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="Height" Value="542" />
+		</Style>
+		<Style Selector="DockPanel.dp1">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+		</Style>
+		<Style Selector="StackPanel.sp1">
+			<Setter Property="Orientation" Value="Vertical"/>
+			<Setter Property="Background" Value="#E2D3C0"/>
+			<Setter Property="Height" Value="600"/>
+		</Style>
+		<Style Selector="Button.b1">
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="Width" Value="150"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Background" Value="#98866F"/>
+		</Style>
+		<Style Selector="Button.b2">
+			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+			<Setter Property="Background" Value="LightGray"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Background" Value="#98866F"/>
+		</Style>
+		<Style Selector="Button.b3">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+			<Setter Property="Background" Value="LightGray"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Background" Value="#98866F"/>
+		</Style>
+		<Style Selector="TabControl.tc1">
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+			<Setter Property="TabStripPlacement" Value="Left"/>
+		</Style>
+		<Style Selector="Border.br1">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="BorderBrush" Value="Gray"/>
+		</Style>
+	</UserControl.Styles>
+	<Grid ColumnDefinitions="3*,17.8*">
+		<StackPanel Orientation="Vertical" VerticalAlignment="Top">
+			<DockPanel Grid.Column="0" Classes="dp1" >
+				<StackPanel Classes="sp1">
+					<TextBlock Classes="tb1">Таблицы:</TextBlock>
+					<ScrollViewer Classes="sv1">
+						<TabControl Name="DataTabs" Items="{Binding MainContext.Tabs}"
+						 Classes="tc1">
+							<TabControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="br1">
+										<Grid RowDefinitions="4*,*">
+											<TextBlock Grid.Row="0" Text="{Binding Header}"/>
+											<Button Grid.Row="1" Content="X"
+											 IsVisible="{Binding ButtonVisible}"
+											 Classes="b2"
+											 Command="{Binding $parent[TabControl].DataContext.ButtonDeleteTab}"
+											 CommandParameter="{Binding}"
+										 />
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</TabControl.ItemTemplate>
+							<TabControl.ContentTemplate>
+								<DataTemplate>
+									<TextBlock Text=""/>
+								</DataTemplate>
+							</TabControl.ContentTemplate>
+						</TabControl>
+					</ScrollViewer>
+					<Button Content="Создать запрос"
+							Command="{Binding $parent[Window].DataContext.Change}"
+							Classes="b1"
+					/>
+				</StackPanel>
+			</DockPanel>
+		</StackPanel>
+		<StackPanel Grid.Column="1"
+					Background="#98866F"
+					>
+			<ScrollViewer Classes="sv2">
+				<!--
+		<ItemsControl Items="{Binding $parent[Window].DataContext.Data.Dogs}">
+			<ItemsControl.DataTemplates>
+				<DataTemplate DataType="{x:Type dbm:Dog}">
+					<Grid ColumnDefinitions="*,*">
+						<TextBlock Grid.Column="0" Text="{Binding Id}"></TextBlock>
+						<TextBlock Grid.Column="1" Text="{Binding Id}"></TextBlock>
+					</Grid>
+				</DataTemplate>
+			</ItemsControl.DataTemplates>
+		</ItemsControl>
+		-->
+
+				<DataGrid Name="DataTable" Items="{Binding $parent[Window].DataContext.Data.Dogs}"
+							Background="#C6AE91" AutoGenerateColumns="True" CanUserSortColumns="True"/>
+
+			</ScrollViewer>
+			<Grid RowDefinitions="1*,1*">
+				<Border Classes="br1" Grid.Row="0" BorderThickness="0,1,0,0">
+					<Button Classes="b3" Content="Create new" Name="CreateNew"
+							IsEnabled="{Binding ButtonsEnabled}"/>
+				</Border>
+				<Border Classes="br1" Grid.Row="1" BorderThickness="0,1,0,0">
+					<Button Classes="b3" Content="Delete" Name="Delete"
+							IsEnabled="{Binding ButtonsEnabled}"/>
+				</Border>
+			</Grid>
+		</StackPanel>
+
+
+	</Grid>
+
+</UserControl>
